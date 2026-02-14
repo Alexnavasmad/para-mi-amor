@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Valentine 💖</title>
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#140018,#2a0033,#3d003d,#1a001f);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    position:relative;
+}
+
+.screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transition:1s;
+}
+
+h1{
+    font-family:'Playfair Display',serif;
+    font-size:2.8rem;
+    text-align:center;
+    text-shadow:0 5px 30px rgba(255,0,120,0.7);
+    margin-bottom:20px;
+    line-height: 1.2;
+}
+
+/* Contenedor del texto final */
+.text-container {
+    max-width: 650px;
+    text-align: center;
+    z-index: 5;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 46, 136, 0.2);
+}
+
+button{
+    padding:16px 55px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+    min-width:180px;
+}
+
+.primary{
+    background:#ff2e88;
+    color:white;
+    box-shadow:0 15px 35px rgba(255,46,136,.6);
+    z-index: 10;
+}
+
+.secondary{
+    background:white;
+    color:#ff2e88;
+}
+
+.intro-gif {
+    width: 220px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+
+/* Vibración del botón NO */
+@keyframes vibration {
+    0% { transform: translate(0); }
+    25% { transform: scale(var(--s)) translate(-3px, 3px); }
+    50% { transform: scale(var(--s)) translate(-3px, -3px); }
+    75% { transform: scale(var(--s)) translate(3px, 3px); }
+    100% { transform: scale(var(--s)) translate(0); }
+}
+.vibrate { animation: vibration 0.2s infinite; }
+
+/* CORAZONES */
+.heart{
+    position:absolute;
+    width:20px;
+    height:20px;
+    transform:rotate(45deg);
+    opacity:.9;
+    pointer-events: none;
+}
+
+.heart:before, .heart:after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:inherit;
+    border-radius:50%;
+}
+.heart:before{top:-50%; left:0;}
+.heart:after{left:-50%; top:0;}
+
+/* Mensajes flotantes de las fotos */
+.floating-msg {
+    position: absolute;
+    color: #00ffcc;
+    font-weight: bold;
+    font-size: 1.3rem;
+    pointer-events: none;
+    animation: fadeUp 2s forwards;
+    z-index: 100;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+@keyframes fadeUp {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-100px); }
+}
+
+.float-anim {
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    from{transform:translateY(110vh) rotate(45deg);opacity:1;}
+    to{transform:translateY(-10vh) rotate(45deg);opacity:0;}
+}
+
+#finalScreen{ opacity:0; pointer-events:none; }
+
+/* FOTOS - AQUÍ ESTÁ EL MOVIMIENTO RECUPERADO */
+.photo{
+    position:absolute;
+    width:220px; 
+    height: auto;
+    border-radius:15px;
+    box-shadow:0 15px 40px rgba(0,0,0,.7);
+    /* Esta es la línea clave del movimiento: */
+    animation: swing 3s ease-in-out infinite alternate; 
+    cursor: pointer;
+    transition: box-shadow 0.3s, border-color 0.3s; /* Quitamos transform del transition para no cortar la animación */
+    border: 4px solid white;
+}
+
+.photo:hover { 
+    border-color: #00ffcc; 
+    box-shadow: 0 0 20px #00ffcc;
+    z-index: 20;
+    /* No ponemos transform scale aquí para que no se pare el movimiento de swing */
+}
+
+/* Animación de balanceo */
+@keyframes swing{ 
+    from{transform:rotate(-5deg);} 
+    to{transform:rotate(5deg);} 
+}
+
+/* Posiciones */
+.p1{left:3%; top:8%; animation-delay: 0s;} 
+.p2{right:3%; top:8%; animation-delay: 1s;} /* Retrasos para que no se muevan igual */
+.p3{left:5%; bottom:8%; animation-delay: 0.5s;} 
+.p4{right:5%; bottom:8%; animation-delay: 1.5s;}
+
+</style>
+</head>
+<body>
+
+<div id="introScreen" class="screen">
+    <img src="intro.gif" class="intro-gif">
+    <h1>¿Preparada para el regalito mi amor? 🎁</h1>
+    <button id="startBtn" class="primary">Estoy lista </button>
+</div>
+
+<div id="questionScreen" class="screen" style="opacity:0; pointer-events:none;">
+    <h1>¿Quieres ser mi Valentine? 💘</h1>
+    <div id="main-container" style="display: flex; gap: 30px; align-items: center; justify-content: center; width: 100%;">
+        <button id="yesBtn" class="primary">Sí 💖</button>
+        <button id="noBtn" class="secondary">No 💔</button>
+    </div>
+</div>
+
+<div id="finalScreen" class="screen">
+    <div class="text-container">
+        <h1>
+        Menos mal le diste sí a la primera mi amor.<br><br>
+        Gracias por elegirme mi amor, 
+        sé que el día de hoy no lo podremos pasar juntos pero quise hacerte un detallito,
+        espero lo disfrutes mucho, es sencillo pero con mucho amor.<br><br>
+        ¡Te amo muchísimo! ❤️
+        </h1>
+        <p style="font-size: 1.1rem; opacity: 0.9; margin-top: 20px; color: #00ffcc;">(Toca las fotitos mi vida...)</p>
+    </div>
+
+    <img src="img1.jpg" class="photo p1" onclick="photoClick(event, '¡Gracias por existir!')">
+    <img src="img2.jpg" class="photo p2" onclick="photoClick(event, '¡Eres la más prejioja!')">
+    <img src="img3.jpg" class="photo p3" onclick="photoClick(event, '¡Te quiero muchito!')">
+    <img src="img4.jpg" class="photo p4" onclick="photoClick(event, '¡Cómprame un chocolatico!')">
+</div>
+
+<audio id="loveMusic" src="cancion.mp3"></audio>
+
+<script>
+const intro=document.getElementById("introScreen");
+const question=document.getElementById("questionScreen");
+const final=document.getElementById("finalScreen");
+const startBtn=document.getElementById("startBtn");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const music=document.getElementById("loveMusic");
+
+let clicks=0;
+let maxClicks=10;
+let scaleYes=1;
+let scaleNo=1;
+
+/* LÓGICA DE INICIO */
+startBtn.addEventListener("click",()=>{
+    music.play();
+    intro.style.opacity="0";
+    setTimeout(()=>{
+        intro.style.display="none";
+        question.style.opacity="1";
+        question.style.pointerEvents="auto";
+    },1000);
+});
+
+/* LÓGICA BOTÓN NO */
+noBtn.addEventListener("mouseover", () => {
+    if(clicks > 0) {
+        noBtn.style.setProperty('--s', scaleNo);
+        noBtn.classList.add("vibrate");
+    }
+});
+noBtn.addEventListener("mouseleave", () => {
+    noBtn.classList.remove("vibrate");
+});
+
+noBtn.addEventListener("click",()=>{
+    if(clicks >= maxClicks) return;
+    clicks++;
+    if(clicks === 1) noBtn.style.position = "absolute";
+    scaleNo -= 0.08;
+    scaleYes += 0.15;
+    if(scaleNo < 0.2) scaleNo = 0.2;
+    yesBtn.style.transform=`scale(${scaleYes})`;
+
+    let maxX = window.innerWidth - 200;
+    let maxY = window.innerHeight - 100;
+    let randomX = Math.random() * maxX;
+    let randomY = Math.random() * maxY;
+
+    let yesRect = yesBtn.getBoundingClientRect();
+    if(Math.abs(randomX - yesRect.left) < 200 && Math.abs(randomY - yesRect.top) < 150){
+        randomX = (randomX + 300) % maxX;
+    }
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+    noBtn.style.transform = `scale(${scaleNo})`;
+
+    if(clicks === maxClicks){
+        noBtn.style.opacity = "0";
+        setTimeout(() => noBtn.style.display = "none", 400);
+    }
+});
+
+/* LÓGICA BOTÓN SÍ */
+yesBtn.addEventListener("click",()=>{
+    question.style.opacity="0";
+    heartExplosion('#ff2e88');
+    setTimeout(()=>{
+        question.style.display="none";
+        final.style.opacity="1";
+        final.style.pointerEvents="auto";
+    },1000);
+});
+
+/* CLIC EN FOTOS (Corazones azules y verdes) */
+function photoClick(e, mensaje) {
+    const msg = document.createElement("div");
+    msg.className = "floating-msg";
+    msg.innerText = mensaje;
+    msg.style.left = e.pageX + "px";
+    msg.style.top = (e.pageY - 40) + "px";
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 2000);
+
+    // Generar corazones azules y verdes
+    for(let i=0; i<15; i++) {
+        const colors = ['#00e5ff', '#26ffad', '#00ff88', '#0099ff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        createSpecialHeart(e.pageX, e.pageY, color);
+    }
+}
+
+function createSpecialHeart(x, y, color) {
+    const h = document.createElement("div");
+    h.classList.add("heart");
+    h.style.background = color;
+    h.style.left = (x - 10) + "px";
+    h.style.top = (y - 10) + "px";
+    
+    const destX = (Math.random() - 0.5) * 500;
+    const destY = (Math.random() - 0.5) * 500;
+    
+    h.animate([
+        { transform: 'translate(0,0) rotate(45deg) scale(1.2)', opacity: 1 },
+        { transform: `translate(${destX}px, ${destY}px) rotate(405deg) scale(0)`, opacity: 0 }
+    ], { 
+        duration: 2500, 
+        easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)', 
+        fill: 'forwards' 
+    });
+
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 2600);
+}
+
+/* FONDO DE CORAZONES */
+setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.classList.add("heart", "float-anim");
+    heart.style.background = "#ff2e88";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+},250);
+
+function heartExplosion(color){
+    for(let i=0;i<60;i++){
+        setTimeout(()=>{
+            const heart=document.createElement("div");
+            heart.classList.add("heart", "float-anim");
+            heart.style.background = color;
+            heart.style.left=Math.random()*100+"vw";
+            heart.style.animationDuration="2s";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),3000);
+        },i*40);
+    }
+}
+</script>
+</body>
+</html>
